@@ -1,6 +1,13 @@
 export interface CurrentUserDto {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
+  statusCode: number;
+  data: {
+    user: {
+      _id: string;
+      fullname: string;
+      email: string;
+      role: string;
+    };
+  };
+  message: string;
+  success: boolean;
 }

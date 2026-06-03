@@ -21,11 +21,7 @@ const DEEP_SCAN_MESSAGES = [
 // Each step takes roughly this many ms to "complete" visually
 const STEP_INTERVAL = 8000;
 
-interface AnalysisLoaderProps {
-  elapsedMs?: number;
-}
-
-export default function AnalysisLoader({ elapsedMs }: AnalysisLoaderProps) {
+export default function AnalysisLoader() {
   const [currentStep, setCurrentStep] = useState(0);
   const [deepScanIndex, setDeepScanIndex] = useState(0);
 
@@ -64,7 +60,6 @@ export default function AnalysisLoader({ elapsedMs }: AnalysisLoaderProps) {
           {ANALYSIS_STEPS.map((step, index) => {
             const isCompleted = index < currentStep;
             const isActive = index === currentStep;
-            const isPending = index > currentStep;
 
             return (
               <div key={index} className="flex items-center gap-4 py-3">

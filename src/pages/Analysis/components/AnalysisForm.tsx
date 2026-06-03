@@ -206,12 +206,6 @@ const AnalysisForm = ({ onSubmittingChange }: AnalysisFormProps) => {
 									<p className="mt-2 font-[family-name:var(--font-label)] text-[11px] uppercase tracking-[0.08em] text-[#6b7280]">
 										PDF only · Max 5MB
 									</p>
-
-									{formik.values.resume ? (
-										<p className="mt-3 text-sm text-[#4b5563]">
-											{Math.round(formik.values.resume.size / 1024)} KB
-										</p>
-									) : null}
 								</label>}
 
 						{formik.touched.resume && formik.errors.resume ? (
@@ -300,7 +294,7 @@ const AnalysisForm = ({ onSubmittingChange }: AnalysisFormProps) => {
 								name="interviewDate"
 								type="date"
 								min={new Date().toISOString().split('T')[0]}
-								value={formik.values.interviewDate}
+								value={formik.values.interviewDate as string}
 								onChange={formik.handleChange}
 								onBlur={formik.handleBlur}
 								className="auth-input h-12 rounded-xl border border-[#cfd4de] bg-white px-4 text-[14px] text-[#111827] outline-none transition-colors focus:border-[#94a3b8]"
