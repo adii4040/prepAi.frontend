@@ -29,6 +29,14 @@ function App() {
 
       <Route element={<PrivateRoute />}>
         <Route
+          path="/"
+          element={
+            <AppLayout>
+              <DashboardPage />
+            </AppLayout>
+          }
+        />
+        <Route
           path="/dashboard"
           element={
             <AppLayout>
