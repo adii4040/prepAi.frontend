@@ -1,9 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import useCurrentUser from "../modules/auth/query/useCurrentUser";
-import { apiService } from "../services/api";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_GET_CURRENT_USER, AuthRoutes } from "../modules/auth/constants";
+import { useLogout } from "../modules/auth/mutation/useLogout";
 
 const navItems = [
   { name: "Analyze", href: "/analyze" },
@@ -13,12 +11,12 @@ const navItems = [
 function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { data: userData } = useCurrentUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const user = userData?.data?.user;
-  console.log("Current user:", user);
+
+  const { mutateAsync: logoutUser } = useLogout()
 
   const isActive = (href: string) => {
     return location.pathname === href;
@@ -36,8 +34,7 @@ function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await apiService.get(AuthRoutes.LOGOUT_USER);
-      queryClient.setQueryData([QUERY_GET_CURRENT_USER], null);
+      await logoutUser();
       navigate('/login');
     } catch (error) {
       console.error("Logout failed", error);
@@ -72,13 +69,13 @@ function Navbar() {
         ))}
       </div>
       <div className="relative" ref={dropdownRef}>
-        <button 
+        <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="w-10 h-10 bg-primary hover:bg-primary-600 transition-colors rounded-full flex items-center justify-center text-sm font-bold text-white uppercase focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
         >
           {getInitials(user?.fullname)}
         </button>
-        
+
         {isDropdownOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-[0_4px_20px_rgba(0,0,0,0.08)] py-1 border border-border overflow-hidden">
             <div className="px-4 py-3 border-b border-border/60 bg-tertiary">
