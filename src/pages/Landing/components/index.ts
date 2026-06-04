@@ -1,0 +1,7 @@
+export { Navbar } from './Navbar'
+export { HeroSection } from './HeroSection'
+export { HowItWorksSection } from './HowItWorksSection'
+export { FeaturesSection } from './FeaturesSection'
+export { ManifestoSection } from './ManifestoSection'
+export { StatsSection } from './StatsSection'
+export { Footer } from './Footer'

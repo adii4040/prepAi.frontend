@@ -7,16 +7,21 @@ import {
   SignupPage,
   DashboardPage,
   AnalysisPage,
-  ReportPage
+  ReportPage,
+  LandingPage
 } from './pages'
 
-import { AppLayout } from './layout/appLayout'
+import { AppLayout } from './layout'
 
 function App() {
 
   return (
     <Routes>
       <Route element={<PublicRoute />}>
+        <Route
+          path="/"
+          element={<LandingPage />}
+        />
         <Route
           path="/login"
           element={<LoginPage />}

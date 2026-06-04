@@ -35,7 +35,7 @@ function Navbar() {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       console.error("Logout failed", error);
     }
@@ -58,7 +58,7 @@ function Navbar() {
     <nav className="w-full h-16 bg-white shadow-md flex items-center justify-between px-20 relative z-50">
       <div className="text-2xl font-bold text-primary font-mono">PrepAI</div>
       <div className="flex space-x-12">
-        {navItems.map((item) => (
+        {userData?.data?.user && navItems.map((item) => (
           <Link
             key={item.href}
             to={item.href}
@@ -76,7 +76,7 @@ function Navbar() {
           {getInitials(user?.fullname)}
         </button>
 
-        {isDropdownOpen && (
+        {userData?.data?.user && isDropdownOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-[0_4px_20px_rgba(0,0,0,0.08)] py-1 border border-border overflow-hidden">
             <div className="px-4 py-3 border-b border-border/60 bg-tertiary">
               <p className="text-sm font-medium text-secondary truncate">{user?.fullname}</p>

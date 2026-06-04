@@ -1,0 +1,1 @@
+export { LandingContainer as LandingPage } from './LandingContainer'
