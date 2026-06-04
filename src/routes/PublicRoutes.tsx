@@ -3,13 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import useCurrentUser from "../modules/auth/query/useCurrentUser";
 
 const PublicRoute = () => {
-    const { data, isLoading } = useCurrentUser();
-    console.log('PublicRoute data:', data);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
+    const { data } = useCurrentUser()
     if (data) {
         return (
             <Navigate

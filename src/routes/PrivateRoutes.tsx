@@ -1,13 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 import useCurrentUser from "../modules/auth/query/useCurrentUser";
+import { AuthLoaderSkeleton } from "../components";
 
 const PrivateRoute = () => {
-    const { data, isLoading } = useCurrentUser();
-    console.log('PrivateRoute data:', data);
+    const { data, isLoading: isCurrentLoading } = useCurrentUser();
 
-    if (isLoading) {
-        return <div>Loading...</div>;
+    if (isCurrentLoading) {
+        return <AuthLoaderSkeleton />
     }
 
     if (!data) {
