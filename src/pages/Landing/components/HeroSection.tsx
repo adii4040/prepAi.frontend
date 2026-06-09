@@ -40,43 +40,49 @@ export const HeroSection = () => {
         medium: '',
         low: '',
     }
-    return (
-        <section id="home" className="max-w-6xl mx-auto px-6 py-20 lg:py-28">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-                <div>
-                    <span className="inline-flex items-center gap-2 font-label text-xs text-neutral border border-border rounded-full px-4 py-1.5 mb-8">
+    return (
+        <section id="home" className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-20 lg:py-28">
+            {/* Improved layout transitions across breakpoints */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+                {/* Left Column Content Area */}
+                <div className="text-center lg:text-left lg:col-span-6 xl:col-span-7 flex flex-col items-center lg:items-start">
+                    <span className="inline-flex items-center gap-2 font-label text-xs text-neutral border border-border rounded-full px-4 py-1.5 mb-6 md:mb-8">
                         AI-Powered Job Readiness Analysis
                     </span>
 
-                    <h1 className="font-headline text-5xl lg:text-6xl font-bold text-secondary leading-[1.05] mb-6">
+                    {/* Responsive text sizing that scales elegantly from mobile viewports */}
+                    <h1 className="font-headline text-4xl sm:text-5xl xl:text-6xl font-bold text-secondary leading-[1.1] mb-6 tracking-tight">
                         Stop guessing.<br />
                         <em className="not-italic text-primary">Know exactly</em> where<br />
                         you stand.
                     </h1>
 
-                    <p className="text-neutral text-lg leading-relaxed mb-10 max-w-md">
+                    <p className="text-neutral text-base sm:text-lg leading-relaxed mb-8 md:mb-10 max-w-md mx-auto lg:mx-0">
                         PrepAI analyzes your resume, your self-description, and the
                         real job market — then tells you precisely what's missing
                         and how to fix it before your interview.
                     </p>
 
-                    <div className="flex items-center gap-4 flex-wrap">
+                    {/* Aligned responsive interactive controls */}
+                    <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto flex-wrap">
                         <Link
                             to="/login"
-                            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-600 transition-colors text-white font-semibold px-6 py-3.5 rounded-lg text-sm"
+                            className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-600 transition-colors text-white font-semibold px-6 py-3.5 rounded-lg text-sm w-full sm:w-auto shadow-sm"
                         >
                             Analyze My Resume →
                         </Link>
                         <Link
                             to="/signup"
-                            className="inline-flex items-center gap-2 border border-border hover:border-primary/40 transition-colors text-secondary font-semibold px-6 py-3.5 rounded-lg text-sm">
-
+                            className="inline-flex items-center justify-center gap-2 border border-border hover:border-primary/40 transition-colors text-secondary font-semibold px-6 py-3.5 rounded-lg text-sm w-full sm:w-auto"
+                        >
                             See How It Works
                         </Link>
                     </div>
 
-                    <div className="flex items-center gap-6 mt-8 flex-wrap">
+                    {/* Feature badge elements */}
+                    <div className="flex flex-row items-center justify-center lg:justify-start gap-x-6 gap-y-3 mt-10 md:mt-12 flex-wrap border-t border-border/60 pt-6 w-full max-w-md lg:max-w-none">
                         {['No fluff. Real gaps.', 'Live market data.', 'Day-by-day prep plan.'].map((item) => (
                             <span key={item} className="font-label text-xs text-neutral flex items-center gap-1.5">
                                 <span className="text-primary">✦</span>
@@ -86,68 +92,75 @@ export const HeroSection = () => {
                     </div>
                 </div>
 
-                <div className="hidden lg:block">
-                    <div className="flex flex-col gap-4 max-w-sm ml-auto">
+                {/* Right Column Visualization Area */}
+                <div className="w-full lg:col-span-6 xl:col-span-5 mt-4 lg:mt-0">
+                    {/* Replaced fixed width tracking with smooth grid-flex system */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 max-w-2xl lg:max-w-md mx-auto lg:ml-auto lg:mr-0 w-full">
                         {examples.map((example) => (
                             <div
                                 key={example.role}
-                                className="bg-card border border-border rounded-2xl p-6 shadow-sm"
+                                className="bg-card border border-border rounded-2xl p-5 md:p-6 shadow-sm flex flex-col justify-between"
                             >
-                                {/* Match score row */}
-                                <div className="flex items-center justify-between mb-5">
-                                    <div>
-                                        <p className="font-label text-xs text-neutral tracking-widest uppercase mb-1">
-                                            Match Strength
-                                        </p>
-                                        <p className="font-headline text-base font-semibold text-secondary">
-                                            {example.role}
-                                        </p>
+                                <div>
+                                    {/* Match score row */}
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className="min-w-0 pr-2">
+                                            <p className="font-label text-[10px] sm:text-xs text-neutral tracking-widest uppercase mb-1 truncate">
+                                                Match Strength
+                                            </p>
+                                            <p className="font-headline text-base font-semibold text-secondary truncate">
+                                                {example.role}
+                                            </p>
+                                        </div>
+                                        <div className="relative w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center flex-shrink-0">
+                                            <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
+                                                <circle cx="28" cy="28" r="24" fill="none" stroke="#E5E5E3" strokeWidth="4" />
+                                                <circle
+                                                    cx="28" cy="28" r="24" fill="none"
+                                                    stroke="#334155" strokeWidth="4"
+                                                    strokeDasharray={`${(example.score / 100) * 150.8} 150.8`}
+                                                    strokeLinecap="round"
+                                                />
+                                            </svg>
+                                            <span className="font-label text-[11px] sm:text-xs font-bold text-secondary">
+                                                {example.score}%
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="relative w-12 h-12 flex items-center justify-center flex-shrink-0">
-                                        <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
-                                            <circle cx="28" cy="28" r="24" fill="none" stroke="#E5E5E3" strokeWidth="4" />
-                                            <circle
-                                                cx="28" cy="28" r="24" fill="none"
-                                                stroke="#334155" strokeWidth="4"
-                                                strokeDasharray={`${(example.score / 100) * 150.8} 150.8`}
-                                                strokeLinecap="round"
-                                            />
-                                        </svg>
-                                        <span className="font-label text-xs font-bold text-secondary">
-                                            {example.score}%
-                                        </span>
+
+                                    <div className="h-px bg-border mb-4" />
+
+                                    {/* Gaps */}
+                                    <p className="font-label text-[10px] sm:text-xs text-neutral tracking-widest uppercase mb-2.5">
+                                        Critical Gaps Identified
+                                    </p>
+                                    <div className="flex flex-wrap gap-1.5 mb-4">
+                                        {example.gaps.map((gap) => (
+                                            <span
+                                                key={gap.label}
+                                                className={`font-label text-[11px] sm:text-xs border rounded-full px-2.5 py-0.5 sm:py-1 ${severityStyles[gap.severity]}`}
+                                            >
+                                                {severityIcon[gap.severity]}{gap.label}
+                                            </span>
+                                        ))}
                                     </div>
                                 </div>
 
-                                <div className="h-px bg-border mb-4" />
+                                <div>
+                                    <div className="h-px bg-border mb-4" />
 
-                                {/* Gaps */}
-                                <p className="font-label text-xs text-neutral tracking-widest uppercase mb-3">
-                                    Critical Gaps Identified
-                                </p>
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    {example.gaps.map((gap) => (
-                                        <span
-                                            key={gap.label}
-                                            className={`font-label text-xs border rounded-full px-3 py-1 ${severityStyles[gap.severity]}`}
-                                        >
-                                            {severityIcon[gap.severity]}{gap.label}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <div className="h-px bg-border mb-4" />
-
-                                <div className="bg-tertiary rounded-xl p-4 flex items-start justify-between gap-3">
-                                    <div>
-                                        <p className="font-label text-xs font-semibold text-secondary mb-1">
-                                            {example.day1.focus}
-                                        </p>
-                                        <p className="text-xs text-neutral leading-relaxed">
-                                            {example.day1.task}
-                                        </p>
+                                    {/* Day 1 Focus Block */}
+                                    <div className="bg-tertiary rounded-xl p-3.5 sm:p-4 flex items-start justify-between gap-3">
+                                        <div className="min-w-0">
+                                            <p className="font-label text-[11px] sm:text-xs font-semibold text-secondary mb-1 truncate">
+                                                {example.day1.focus}
+                                            </p>
+                                            <p className="text-[11px] sm:text-xs text-neutral leading-relaxed">
+                                                {example.day1.task}
+                                            </p>
+                                        </div>
+                                        <span className="text-primary text-sm sm:text-base flex-shrink-0 mt-0.5">✦</span>
                                     </div>
-                                    <span className="text-primary text-base flex-shrink-0 mt-0.5">✦</span>
                                 </div>
                             </div>
                         ))}
@@ -155,6 +168,6 @@ export const HeroSection = () => {
                 </div>
 
             </div>
-        </section >
+        </section>
     )
 }

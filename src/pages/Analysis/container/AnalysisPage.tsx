@@ -3,7 +3,7 @@ import AnalysisForm from '../components/AnalysisForm';
 
 const AnalysisPage: React.FC = () => {
     return (
-        <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8 mx-[18%] ">
+        <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
             <div className="mx-auto flex w-full flex-col items-center">
                 <div className="max-w-3xl text-center">
                     <h1 className="text-balance text-[clamp(2.25rem,4vw,4rem)] font-bold tracking-[-0.04em] text-[#111827]">

@@ -148,13 +148,13 @@ const AnalysisForm = ({ onSubmittingChange }: AnalysisFormProps) => {
 
 	if (isSubmitting && !isSubmitError) {
 		return (
-			<main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8 mx-[18%]">
+			<div className="w-full py-8 flex justify-center">
 				<AnalysisLoader />
-			</main>
+			</div>
 		);
 	} else if (isSubmitError) {
 		return (
-			<main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8 mx-[18%] flex flex-col items-center justify-center">
+			<div className="w-full py-8 flex flex-col items-center justify-center">
 				<div className="w-full max-w-xl rounded-2xl border border-red-100 bg-[#fff5f5]/60 p-8 shadow-[0_18px_50px_rgba(239,68,68,0.05)] backdrop-blur-sm text-center transition-all duration-300 hover:shadow-[0_18px_50px_rgba(239,68,68,0.09)]">
 					<div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-100/80 text-red-600 animate-pulse">
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
@@ -179,7 +179,7 @@ const AnalysisForm = ({ onSubmittingChange }: AnalysisFormProps) => {
 						Reset
 					</button>
 				</div>
-			</main>
+			</div>
 		);
 	}
 

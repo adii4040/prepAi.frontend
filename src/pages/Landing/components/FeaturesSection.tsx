@@ -85,29 +85,29 @@ export const FeaturesSection = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div className="col-span-1 md:col-span-1">
             <FeatureCard {...features[0]} />
           </div>
-          <div className="col-span-2">
+          <div className="col-span-1 md:col-span-2">
             <FeatureCard {...features[1]} />
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div className="col-span-1 md:col-span-2">
             <FeatureCard {...features[2]} />
           </div>
-          <div className="col-span-1">
+          <div className="col-span-1 md:col-span-1">
             <FeatureCard {...features[3]} />
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
-          <div className="col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="col-span-1 md:col-span-1">
             <FeatureCard {...features[4]} />
           </div>
-          <div className="col-span-2">
+          <div className="col-span-1 md:col-span-2">
             <FeatureCard {...features[5]} />
           </div>
         </div>
