@@ -1,23 +1,7 @@
 
-import { useState, useCallback } from 'react';
 import AnalysisForm from '../components/AnalysisForm';
-import AnalysisLoader from '../components/AnalysisLoader';
 
 const AnalysisPage: React.FC = () => {
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
-
-    const handleSubmittingChange = useCallback((submitting: boolean) => {
-        setIsAnalyzing(submitting);
-    }, []);
-
-    if (isAnalyzing) {
-        return (
-            <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8 mx-[18%]">
-                <AnalysisLoader />
-            </main>
-        );
-    }
-
     return (
         <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8 mx-[18%] ">
             <div className="mx-auto flex w-full flex-col items-center">
@@ -31,7 +15,7 @@ const AnalysisPage: React.FC = () => {
                 </div>
 
                 <div className="mt-8 w-full">
-                    <AnalysisForm onSubmittingChange={handleSubmittingChange} />
+                    <AnalysisForm />
                 </div>
             </div>
         </main>

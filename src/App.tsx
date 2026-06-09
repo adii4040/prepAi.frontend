@@ -11,7 +11,7 @@ import {
   LandingPage
 } from './pages'
 
-import { AppLayout } from './layout'
+import { AppLayout } from './layout/AppLayout'
 
 function App() {
 

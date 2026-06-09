@@ -1,6 +1,4 @@
-
-
-import { useMemo } from 'react';
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogin } from '../../../modules/auth/mutation/useLogin';
@@ -17,9 +15,10 @@ const initialValues: LoginFormValues = {
 
 function LoginPage() {
   const navigate = useNavigate();
-  const loginMutation = useLogin();
+  const {mutateAsync: loginMutation, isPending: isLoginPending} = useLogin();
+  const [showPassword, setShowPassword] = useState(false);
 
-  const formik = useFormik<LoginFormValues>({
+  const formik = useFormik({
     initialValues,
     validate: (values) => {
       const errors: Partial<Record<keyof LoginFormValues, string>> = {};
@@ -38,9 +37,8 @@ function LoginPage() {
     },
     onSubmit: async (values, { setStatus, resetForm }) => {
       setStatus(undefined);
-
       try {
-        await loginMutation.mutateAsync(values);
+        await loginMutation(values);
         resetForm();
         navigate('/dashboard');
       } catch (error) {
@@ -51,166 +49,107 @@ function LoginPage() {
     },
   });
 
-  const isSubmitting = useMemo(
-    () => formik.isSubmitting || loginMutation.isPending,
-    [formik.isSubmitting, loginMutation.isPending]
-  );
 
   return (
-    <main
-      style={{
-        minHeight: '100svh',
-        display: 'grid',
-        placeItems: 'center',
-        padding: '32px 20px',
-        background:
-          'radial-gradient(circle at top, rgba(170, 59, 255, 0.12), transparent 38%), linear-gradient(180deg, rgba(8, 6, 13, 0.03), transparent 30%)',
-      }}
-    >
-      <section
-        style={{
-          width: '100%',
-          maxWidth: '440px',
-          border: '1px solid var(--border)',
-          borderRadius: '24px',
-          background: 'rgba(255, 255, 255, 0.78)',
-          backdropFilter: 'blur(18px)',
-          boxShadow: 'var(--shadow)',
-          padding: '32px',
-          textAlign: 'left',
-        }}
-      >
-        <div style={{ marginBottom: '24px' }}>
-          <p
-            style={{
-              margin: '0 0 8px',
-              color: 'var(--accent)',
-              fontSize: '14px',
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-            }}
-          >
-            Welcome back
-          </p>
-          <h1 style={{ margin: 0, fontSize: '36px', lineHeight: 1.05, color: '#111827' }}>
-            Sign in
-          </h1>
-          <p style={{ marginTop: '12px', color: '#4b5563' }}>
-            Continue to your dashboard with your existing account.
-          </p>
-        </div>
+    <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4 py-12 sm:px-6 lg:px-8">
 
-        <form onSubmit={formik.handleSubmit} noValidate>
-          <div style={{ display: 'grid', gap: '16px' }}>
-            <label style={{ display: 'grid', gap: '8px' }}>
-              <span style={{ fontWeight: 600, color: '#111827' }}>
-                Email
-              </span>
-              <input
-                className="auth-input"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                placeholder="jane@company.com"
-                style={inputStyle}
-              />
-              {formik.touched.email && formik.errors.email ? (
-                <span style={errorStyle}>{formik.errors.email}</span>
-              ) : null}
+      <div className="w-full max-w-md space-y-8 rounded-xl border border-border bg-white p-8 shadow-sm">
+        <h1 className="font-headline text-3xl font-bold text-secondary mb-5 border-b border-border pb-8 text-center">
+          Sign in
+        </h1>
+        <form
+          onSubmit={formik.handleSubmit}
+          noValidate
+          className="flex flex-col gap-5"
+        >
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-semibold text-secondary">
+              Email Address
             </label>
+            <input
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="you@example.com"
+              className={`w-full rounded-lg border bg-card px-4 py-3 text-sm text-secondary placeholder:text-neutral outline-none transition-colors
+                ${formik.touched.email && formik.errors.email
+                  ? 'border-danger focus:border-danger'
+                  : 'border-border focus:border-primary'
+                }`}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <span className="text-danger text-xs">{formik.errors.email}</span>
+            )}
+          </div>
 
-            <label style={{ display: 'grid', gap: '8px' }}>
-              <span style={{ fontWeight: 600, color: '#111827' }}>
+          <div className="flex flex-col gap-1.5">
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-semibold text-secondary">
                 Password
-              </span>
+              </label>
+            </div>
+            <div className="relative">
               <input
-                className="auth-input"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder="Your password"
-                style={inputStyle}
+                className={`w-full rounded-lg border bg-card px-4 py-3 pr-16 text-sm text-secondary placeholder:text-neutral outline-none transition-colors
+                  ${formik.touched.password && formik.errors.password
+                    ? 'border-danger focus:border-danger'
+                    : 'border-border focus:border-primary'
+                  }`}
               />
-              {formik.touched.password && formik.errors.password ? (
-                <span style={errorStyle}>{formik.errors.password}</span>
-              ) : null}
-            </label>
-
-            {formik.status ? (
-              <div
-                role="alert"
-                style={{
-                  padding: '12px 14px',
-                  borderRadius: '12px',
-                  background: 'rgba(220, 38, 38, 0.08)',
-                  color: '#b91c1c',
-                  border: '1px solid rgba(220, 38, 38, 0.2)',
-                }}
+              <button
+                type="button"
+                onClick={() => setShowPassword((p) => !p)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral hover:text-secondary transition-colors"
               >
-                {formik.status}
-              </div>
-            ) : null}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              style={buttonStyle}
-            >
-              {isSubmitting ? 'Signing in...' : 'Sign in'}
-            </button>
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+            {formik.touched.password && formik.errors.password && (
+              <span className="text-danger text-xs">{formik.errors.password}</span>
+            )}
           </div>
+          {formik.status && (
+            <div
+              role="alert"
+              className="rounded-lg border border-danger/20 bg-danger/5 px-4 py-3 text-sm text-danger"
+            >
+              {formik.status}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isLoginPending}
+            className="w-full rounded-lg bg-primary hover:bg-primary-600 disabled:opacity-60 disabled:cursor-not-allowed transition-colors px-4 py-3 text-sm font-semibold text-white mt-1"
+          >
+            {isLoginPending ? 'Signing in...' : 'Sign In →'}
+          </button>
         </form>
 
-        <p style={{ marginTop: '20px', color: '#4b5563' }}>
-          New here?{' '}
-          <Link to="/signup" style={linkStyle}>
-            Create an account
-          </Link>
-        </p>
-      </section>
-    </main>
+        <div className="mt-8">
+          <p className="text-neutral text-sm">
+            Don't have an account?{' '}
+            <Link
+              to="/signup"
+              className="text-primary font-semibold hover:underline"
+            >
+              Create one
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  boxSizing: 'border-box',
-  borderRadius: '14px',
-  border: '1px solid var(--border)',
-  padding: '14px 16px',
-  font: 'inherit',
-  color: '#111827',
-  background: 'rgba(255, 255, 255, 0.96)',
-  outline: 'none',
-};
-
-const buttonStyle: React.CSSProperties = {
-  border: 'none',
-  borderRadius: '14px',
-  padding: '14px 16px',
-  font: 'inherit',
-  fontWeight: 700,
-  color: 'white',
-  background: 'linear-gradient(135deg, var(--accent), #7c3aed)',
-  cursor: 'pointer',
-};
-
-const errorStyle: React.CSSProperties = {
-  color: '#b91c1c',
-  fontSize: '14px',
-};
-
-const linkStyle: React.CSSProperties = {
-  color: 'var(--accent)',
-  fontWeight: 600,
-  textDecoration: 'none',
-};
 
 export default LoginPage;

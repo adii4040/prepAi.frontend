@@ -1,6 +1,3 @@
-
-
-import { useMemo } from 'react';
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignup } from '../../../modules/auth/mutation/useSignup';
@@ -19,9 +16,9 @@ const initialValues: SignupFormValues = {
 
 const SignupPage = () => {
   const navigate = useNavigate();
-  const signupMutation = useSignup();
+  const {mutateAsync: signupMutation, isPending: isSignupPending} = useSignup();
 
-  const formik = useFormik<SignupFormValues>({
+ const formik = useFormik({
     initialValues,
     validate: (values) => {
       const errors: Partial<Record<keyof SignupFormValues, string>> = {};
@@ -48,7 +45,7 @@ const SignupPage = () => {
       setStatus(undefined);
 
       try {
-        await signupMutation.mutateAsync(values);
+        await signupMutation(values);
         resetForm();
         navigate('/login');
       } catch (error) {
@@ -59,64 +56,33 @@ const SignupPage = () => {
     },
   });
 
-  const isSubmitting = useMemo(
-    () => formik.isSubmitting || signupMutation.isPending,
-    [formik.isSubmitting, signupMutation.isPending]
-  );
+
 
   return (
-    <main
-      style={{
-        minHeight: '100svh',
-        display: 'grid',
-        placeItems: 'center',
-        padding: '32px 20px',
-        background:
-          'radial-gradient(circle at top, rgba(170, 59, 255, 0.12), transparent 38%), linear-gradient(180deg, rgba(8, 6, 13, 0.03), transparent 30%)',
-      }}
-    >
-      <section
-        style={{
-          width: '100%',
-          maxWidth: '440px',
-          border: '1px solid var(--border)',
-          borderRadius: '24px',
-          background: 'rgba(255, 255, 255, 0.78)',
-          backdropFilter: 'blur(18px)',
-          boxShadow: 'var(--shadow)',
-          padding: '32px',
-          textAlign: 'left',
-        }}
-      >
-        <div style={{ marginBottom: '24px' }}>
-          <p
-            style={{
-              margin: '0 0 8px',
-              color: 'var(--accent)',
-              fontSize: '14px',
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-            }}
-          >
+    <main className="flex min-h-[100svh] items-center justify-center px-5 py-8 bg-[radial-gradient(circle_at_top,_rgba(170,59,255,0.12),_transparent_38%)] bg-no-repeat bg-neutral-50/20">
+      
+      <section className="w-full max-w-[440px] rounded-[24px] border border-border bg-white/78 backdrop-blur-[18px] p-8 shadow-sm text-left">
+        
+        <div className="mb-6">
+          <p className="m-0 mb-2 text-xs font-bold text-primary tracking-widest uppercase">
             Create account
           </p>
-          <h1 style={{ margin: 0, fontSize: '36px', lineHeight: 1.05, color: '#111827' }}>
+          <h1 className="m-0 text-[36px] font-bold tracking-tight leading-[1.05] text-secondary">
             Sign up
           </h1>
-          <p style={{ marginTop: '12px', color: '#4b5563' }}>
+          <p className="mt-3 text-sm text-neutral">
             Register your account to start unmasking resumes.
           </p>
         </div>
 
         <form onSubmit={formik.handleSubmit} noValidate>
-          <div style={{ display: 'grid', gap: '16px' }}>
-            <label style={{ display: 'grid', gap: '8px' }}>
-              <span style={{ fontWeight: 600, color: '#111827' }}>
+          <div className="grid gap-4">
+            
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-secondary">
                 Full name
               </span>
               <input
-                className="auth-input"
                 name="fullname"
                 type="text"
                 autoComplete="name"
@@ -124,19 +90,22 @@ const SignupPage = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder="Jane Doe"
-                style={inputStyle}
+                className={`w-full rounded-[14px] border bg-white/96 px-4 py-[14px] text-sm text-secondary outline-none transition-colors
+                  ${formik.touched.fullname && formik.errors.fullname
+                    ? 'border-danger focus:border-danger'
+                    : 'border-border focus:border-primary'
+                  }`}
               />
-              {formik.touched.fullname && formik.errors.fullname ? (
-                <span style={errorStyle}>{formik.errors.fullname}</span>
-              ) : null}
+              {formik.touched.fullname && formik.errors.fullname && (
+                <span className="text-danger text-xs">{formik.errors.fullname}</span>
+              )}
             </label>
 
-            <label style={{ display: 'grid', gap: '8px' }}>
-              <span style={{ fontWeight: 600, color: '#111827' }}>
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-secondary">
                 Email
               </span>
               <input
-                className="auth-input"
                 name="email"
                 type="email"
                 autoComplete="email"
@@ -144,19 +113,23 @@ const SignupPage = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder="jane@company.com"
-                style={inputStyle}
+                className={`w-full rounded-[14px] border bg-white/96 px-4 py-[14px] text-sm text-secondary outline-none transition-colors
+                  ${formik.touched.email && formik.errors.email
+                    ? 'border-danger focus:border-danger'
+                    : 'border-border focus:border-primary'
+                  }`}
               />
-              {formik.touched.email && formik.errors.email ? (
-                <span style={errorStyle}>{formik.errors.email}</span>
-              ) : null}
+              {formik.touched.email && formik.errors.email && (
+                <span className="text-danger text-xs">{formik.errors.email}</span>
+              )}
             </label>
 
-            <label style={{ display: 'grid', gap: '8px' }}>
-              <span style={{ fontWeight: 600, color: '#111827' }}>
+
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-secondary">
                 Password
               </span>
               <input
-                className="auth-input"
                 name="password"
                 type="password"
                 autoComplete="new-password"
@@ -164,81 +137,45 @@ const SignupPage = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder="At least 6 characters"
-                style={inputStyle}
+                className={`w-full rounded-[14px] border bg-white/96 px-4 py-[14px] text-sm text-secondary outline-none transition-colors
+                  ${formik.touched.password && formik.errors.password
+                    ? 'border-danger focus:border-danger'
+                    : 'border-border focus:border-primary'
+                  }`}
               />
-              {formik.touched.password && formik.errors.password ? (
-                <span style={errorStyle}>{formik.errors.password}</span>
-              ) : null}
+              {formik.touched.password && formik.errors.password && (
+                <span className="text-danger text-xs">{formik.errors.password}</span>
+              )}
             </label>
 
-            {formik.status ? (
+            {formik.status && (
               <div
                 role="alert"
-                style={{
-                  padding: '12px 14px',
-                  borderRadius: '12px',
-                  background: 'rgba(220, 38, 38, 0.08)',
-                  color: '#b91c1c',
-                  border: '1px solid rgba(220, 38, 38, 0.2)',
-                }}
+                className="rounded-lg border border-danger/20 bg-danger/5 px-4 py-3 text-sm text-danger"
               >
                 {formik.status}
               </div>
-            ) : null}
+            )}
 
             <button
               type="submit"
-              disabled={isSubmitting}
-              style={buttonStyle}
+              disabled={isSignupPending || formik.isSubmitting}
+              className="w-full rounded-[14px] border-none bg-gradient-to-br from-primary to-primary-600 px-4 py-[14px] text-sm font-bold text-white transition-all hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed mt-1"
             >
-              {isSubmitting ? 'Creating account...' : 'Create account'}
+              {isSignupPending || formik.isSubmitting ? 'Creating account...' : 'Create account'}
             </button>
           </div>
         </form>
 
-        <p style={{ marginTop: '20px', color: '#4b5563' }}>
+        <p className="mt-5 text-sm text-neutral">
           Already have an account?{' '}
-          <Link to="/login" style={linkStyle}>
+          <Link to="/login" className="text-primary font-semibold hover:underline no-underline">
             Sign in
           </Link>
         </p>
       </section>
     </main>
   );
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  boxSizing: 'border-box',
-  borderRadius: '14px',
-  border: '1px solid var(--border)',
-  padding: '14px 16px',
-  font: 'inherit',
-  color: '#111827',
-  background: 'rgba(255, 255, 255, 0.96)',
-  outline: 'none',
-};
-
-const buttonStyle: React.CSSProperties = {
-  border: 'none',
-  borderRadius: '14px',
-  padding: '14px 16px',
-  font: 'inherit',
-  fontWeight: 700,
-  color: 'white',
-  background: 'linear-gradient(135deg, var(--accent), #7c3aed)',
-  cursor: 'pointer',
-};
-
-const errorStyle: React.CSSProperties = {
-  color: '#b91c1c',
-  fontSize: '14px',
-};
-
-const linkStyle: React.CSSProperties = {
-  color: 'var(--accent)',
-  fontWeight: 600,
-  textDecoration: 'none',
 };
 
 export default SignupPage;

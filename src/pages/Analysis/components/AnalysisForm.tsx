@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useUploadAnalysis } from '../../../modules/analytics/mutation/useUploadAnalysis';
+import AnalysisLoader from './AnalysisLoader';
 
 type AnalysisFormValues = {
 	resume: File | null;
@@ -26,7 +27,7 @@ interface AnalysisFormProps {
 
 const AnalysisForm = ({ onSubmittingChange }: AnalysisFormProps) => {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
-	const { mutateAsync: uploadResume, isPending: isSubmitting } = useUploadAnalysis();
+	const { mutateAsync: uploadResume, isPending: isSubmitting, isError: isSubmitError } = useUploadAnalysis();
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -58,9 +59,9 @@ const AnalysisForm = ({ onSubmittingChange }: AnalysisFormProps) => {
 					selfDescription: values.selfDescription,
 					interviewDate: values.interviewDate as Date,
 				});
-				
+
 				const analysisId = (response as any)?.data?.analysisRecord?._id;
-				
+
 				if (analysisId) {
 					navigate(`/report/${analysisId}`);
 				}
@@ -144,6 +145,43 @@ const AnalysisForm = ({ onSubmittingChange }: AnalysisFormProps) => {
 	const preventDefault = (event: React.DragEvent<HTMLLabelElement>) => {
 		event.preventDefault();
 	};
+
+	if (isSubmitting && !isSubmitError) {
+		return (
+			<main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8 mx-[18%]">
+				<AnalysisLoader />
+			</main>
+		);
+	} else if (isSubmitError) {
+		return (
+			<main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8 mx-[18%] flex flex-col items-center justify-center">
+				<div className="w-full max-w-xl rounded-2xl border border-red-100 bg-[#fff5f5]/60 p-8 shadow-[0_18px_50px_rgba(239,68,68,0.05)] backdrop-blur-sm text-center transition-all duration-300 hover:shadow-[0_18px_50px_rgba(239,68,68,0.09)]">
+					<div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-100/80 text-red-600 animate-pulse">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+							<circle cx="12" cy="12" r="10"></circle>
+							<line x1="12" y1="8" x2="12" y2="12"></line>
+							<line x1="12" y1="16" x2="12.01" y2="16"></line>
+						</svg>
+					</div>
+
+					<h1 className="mt-5 text-xl font-bold tracking-tight text-[#991b1b]">
+						Analysis Error Occurred
+					</h1>
+
+					<p className="mt-3 text-sm leading-relaxed text-red-800 bg-red-50/50 p-4 rounded-xl border border-red-100/50 font-mono text-left whitespace-pre-wrap break-words">
+						Model is experiencing high spike in demand, please try again later
+					</p>
+
+					<button
+						onClick={() => window.location.reload()}
+						className="mt-6 rounded-lg bg-white border border-gray-200 px-5 py-2 text-sm font-semibold text-red-600 shadow-sm hover:bg-gray-50 hover:text-red-700 active:scale-95 transition-all duration-150"
+					>
+						Reset
+					</button>
+				</div>
+			</main>
+		);
+	}
 
 	return (
 		<form onSubmit={formik.handleSubmit} noValidate>
